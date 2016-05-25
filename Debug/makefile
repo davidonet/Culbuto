@@ -145,7 +145,7 @@ all: Culbuto.out
 Culbuto.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: MSP430 Linker'
-	"/home/dolivari/ti/ccsv6/tools/compiler/msp430_15.12.2.LTS/bin/cl430" -vmsp --use_hw_mpy=none --advice:power=all -g --gcc --define=__MSP430G2452__ --display_error_number --diag_warning=225 --diag_wrap=off --abi=eabi --printf_support=minimal -z -m"Culbuto.map" --stack_size=80 --heap_size=80 -i"/home/dolivari/ti/ccsv6/ccs_base/msp430/include" -i"/home/dolivari/ti/ccsv6/tools/compiler/msp430_15.12.2.LTS/lib" -i"/home/dolivari/ti/ccsv6/tools/compiler/msp430_15.12.2.LTS/include" --reread_libs --display_error_number --diag_wrap=off --warn_sections --xml_link_info="Culbuto_linkInfo.xml" --use_hw_mpy=none --rom_model -o "Culbuto.out" $(ORDERED_OBJS)
+	"/home/dolivari/ti/ccsv6/tools/compiler/msp430_15.12.2.LTS/bin/cl430" -vmsp --use_hw_mpy=none --advice:power=all -g --gcc --define=__MSP430G2452__ --diag_wrap=off --diag_warning=225 --display_error_number --abi=eabi --printf_support=minimal -z -m"Culbuto.map" --stack_size=80 --heap_size=80 -i"/home/dolivari/ti/ccsv6/ccs_base/msp430/include" -i"/home/dolivari/ti/ccsv6/tools/compiler/msp430_15.12.2.LTS/lib" -i"/home/dolivari/ti/ccsv6/tools/compiler/msp430_15.12.2.LTS/include" --reread_libs --diag_wrap=off --warn_sections --display_error_number --xml_link_info="Culbuto_linkInfo.xml" --use_hw_mpy=none --rom_model -o "Culbuto.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 

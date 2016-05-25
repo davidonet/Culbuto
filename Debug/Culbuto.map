@@ -1,7 +1,7 @@
 ******************************************************************************
                   MSP430 Linker Unix v15.12.2                  
 ******************************************************************************
->> Linked Wed May 25 13:05:39 2016
+>> Linked Wed May 25 15:34:31 2016
 
 OUTPUT FILE NAME:   <Culbuto.out>
 ENTRY POINT SYMBOL: "_c_int00_noargs_noexit"  address: 0000ece0

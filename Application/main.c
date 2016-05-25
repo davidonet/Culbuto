@@ -29,9 +29,9 @@ int8_t computeAccel(){
 	uint8_t j = 0;
 	int8_t b = 0;
 	for (j = 0;j<8; j++) {
-	    if( ay[j]<-10 )
+	    if( ay[j]<-12 )
 	        b--;
-	    if (10 < ay[j])
+	    if (12 < ay[j])
 	        b++;
 	}
 	int8_t r = 0;
