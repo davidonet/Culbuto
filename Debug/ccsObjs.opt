@@ -1,0 +1,1 @@
+"./Application/main.obj" "./Application/structure.obj" "./Library/CTS_HAL.obj" "./Library/CTS_Layer.obj" "./Library/usi_i2c.obj" "../lnk_msp430g2452.cmd" -llibc.a 
