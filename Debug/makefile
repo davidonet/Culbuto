@@ -2,7 +2,7 @@
 # Automatically-generated file. Do not edit!
 ################################################################################
 
-CG_TOOL_ROOT := /home/dolivari/ti/ccsv6/tools/compiler/ti-cgt-msp430_15.12.1.LTS
+CG_TOOL_ROOT := /home/dolivari/ti/ccsv6/tools/compiler/msp430_15.12.2.LTS
 
 GEN_OPTS__FLAG := 
 GEN_CMDS__FLAG := 
@@ -145,13 +145,13 @@ all: Culbuto.out
 Culbuto.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: MSP430 Linker'
-	"/home/dolivari/ti/ccsv6/tools/compiler/ti-cgt-msp430_15.12.1.LTS/bin/cl430" -vmsp --abi=eabi --use_hw_mpy=none --advice:power=all -g --gcc --define=__MSP430G2452__ --diag_warning=225 --diag_wrap=off --display_error_number --printf_support=minimal -z -m"Culbuto.map" --heap_size=80 --stack_size=80 -i"/home/dolivari/ti/ccsv6/ccs_base/msp430/include" -i"/home/dolivari/ti/ccsv6/tools/compiler/ti-cgt-msp430_15.12.1.LTS/lib" -i"/home/dolivari/ti/ccsv6/tools/compiler/ti-cgt-msp430_15.12.1.LTS/include" --reread_libs --warn_sections --diag_wrap=off --display_error_number --xml_link_info="Culbuto_linkInfo.xml" --use_hw_mpy=none --rom_model -o "Culbuto.out" $(ORDERED_OBJS)
+	"/home/dolivari/ti/ccsv6/tools/compiler/msp430_15.12.2.LTS/bin/cl430" -vmsp --use_hw_mpy=none --advice:power=all -g --gcc --define=__MSP430G2452__ --display_error_number --diag_warning=225 --diag_wrap=off --abi=eabi --printf_support=minimal -z -m"Culbuto.map" --stack_size=80 --heap_size=80 -i"/home/dolivari/ti/ccsv6/ccs_base/msp430/include" -i"/home/dolivari/ti/ccsv6/tools/compiler/msp430_15.12.2.LTS/lib" -i"/home/dolivari/ti/ccsv6/tools/compiler/msp430_15.12.2.LTS/include" --reread_libs --display_error_number --diag_wrap=off --warn_sections --xml_link_info="Culbuto_linkInfo.xml" --use_hw_mpy=none --rom_model -o "Culbuto.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 Culbuto.hex: $(EXE_OUTPUTS)
 	@echo 'Invoking: MSP430 Hex Utility'
-	"/home/dolivari/ti/ccsv6/tools/compiler/ti-cgt-msp430_15.12.1.LTS/bin/hex430" --memwidth=8 --romwidth=8 -o "Culbuto.hex" $(EXE_OUTPUTS__QUOTED)
+	"/home/dolivari/ti/ccsv6/tools/compiler/msp430_15.12.2.LTS/bin/hex430" --memwidth=8 --romwidth=8 -o "Culbuto.hex" $(EXE_OUTPUTS__QUOTED)
 	@echo 'Finished building: $@'
 	@echo ' '
 
