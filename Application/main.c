@@ -14,16 +14,16 @@ void initAccel() {
 
 int8_t computeAccel() {
 // High debouncing orientation change
-	ay[i] = (int8_t) ((data[0] << 8 | data[1]) >> 8);
-	i++;
-	if (7 < i)
-		i = 0;
+	accelHistory[historyIndex] = (int8_t) ((rawAccelData[0] << 8 | rawAccelData[1]) >> 8);
+	historyIndex++;
+	if (7 < historyIndex)
+		historyIndex = 0;
 	uint8_t j = 0;
 	int8_t b = 0;
 	for (j = 0; j < 8; j++) {
-		if (ay[j] < -12)
+		if (accelHistory[j] < -12)
 			b--;
-		if (12 < ay[j])
+		if (12 < accelHistory[j])
 			b++;
 	}
 	int8_t r = 0;
@@ -56,24 +56,24 @@ void initIO() {
 
 void startMotor() {
 // setting valve
-	if (orient < 0) {
+	if (currentOrientation < 0) {
 		P1OUT |= BIT1;
 	} else {
 		P1OUT &= ~BIT1;
 	}
-	running = 1;
+	isMotorOn = 1;
 }
 
 void stopMotor() {
 // stop motor and valve
-	running = 0;
+	isMotorOn = 0;
 	P1OUT &= ~BIT1;
 	P1OUT &= ~BIT2;
 }
 
 void startMode() {
 	P2OUT = 0;
-	if (orient != 0) {
+	if (currentOrientation != 0) {
 		if (isBoost)
 			P2OUT |= BIT1;
 		if (selectedMode == AROMA) {
@@ -99,14 +99,14 @@ void startMode() {
 
 void checkCap() {
 	keyPressed = (struct Element *) TI_CAPT_Buttons(&buttons);
-	if ((orient != 0) && (keyPressed)) {
+	if ((currentOrientation != 0) && (keyPressed)) {
 		if (keyPressed == &aroma_element) {
 			selectedMode = AROMA;
 			startMode();
 		}
 		if (keyPressed == &boost_element) {
 			isBoost = !isBoost;
-			if ((orient != 0) && isBoost) {
+			if ((currentOrientation != 0) && isBoost) {
 				P2OUT |= BIT1;
 			} else {
 				P2OUT &= ~BIT1;
@@ -158,7 +158,7 @@ void timerCount() {
 }
 
 void motorDriver() {
-	if (running) {
+	if (isMotorOn) {
 		// switch on motor
 		P1OUT |= BIT2;
 	} else {
@@ -177,7 +177,7 @@ void motorDriver() {
 	}
 }
 
-int8_t neworient = 0;
+
 void main(void) {
 	initIO();
 	initCap();
@@ -191,7 +191,7 @@ void main(void) {
 			switch (ticks) {
 			case 1:
 				// retrieve accelerometer data
-				i2c_send_sequence(mma8452_read_interrupt_source, 6, data, 0);
+				i2c_send_sequence(mma8452_read_interrupt_source, 6, rawAccelData, 0);
 				break;
 
 			case 2:
@@ -201,9 +201,9 @@ void main(void) {
 
 			case 3:
 				// check orientation
-				neworient = computeAccel();
-				if (neworient != orient) {
-					orient = neworient;
+				newOrientation = computeAccel();
+				if (newOrientation != currentOrientation) {
+					currentOrientation = newOrientation;
 					startMode();
 				}
 				break;

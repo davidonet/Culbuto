@@ -50,11 +50,12 @@ static const uint16_t mma8452_stop[] = { 0x3a, CTRL_REG1, 0x00, I2C_RESTART,
 		0x3b, I2C_READ };
 static const uint16_t mma8452_start[] = { 0x3a, CTRL_REG1, 0x11, I2C_RESTART,
 		0x3b, I2C_READ };
-uint8_t data[2];
-int8_t ay[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
-uint8_t i = 0;
-uint8_t running = 0;
-int16_t orient = 0;
+uint8_t rawAccelData[2];
+int8_t accelHistory[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+uint8_t historyIndex = 0;
+uint8_t isMotorOn = 0;
+int16_t currentOrientation = 0;
+int8_t newOrientation = 0;
 uint16_t cycle = 0;
 uint16_t onDuration = 0;
 uint16_t onoffDuration = 0;
@@ -66,3 +67,4 @@ typedef enum {
 } mode_t;
 mode_t selectedMode = AROMA;
 uint8_t isBoost = 0;
+
