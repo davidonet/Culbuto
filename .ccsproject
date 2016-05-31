@@ -13,5 +13,5 @@
 	<templateProperties value="id=ro_pinosc_ta0_wdtp_wheel_buttons.projectspec.RO_PINOSC_TA0_WDTp_Wheel_Buttons,"/>
 	<origin value="/home/dolivari/Dropbox/Projects/David_Olivari/dev/Culbuto"/>
 	<filesToOpen value=""/>
-	<isTargetManual value="false"/>
+	<isTargetManual value="true"/>
 </projectOptions>

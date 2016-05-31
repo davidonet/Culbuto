@@ -48,7 +48,7 @@ enum MMA8452Q_Register {
 
 struct Element * keyPressed;
 static const uint16_t mma8452_read_interrupt_source[] = { 0x3a, OUT_Y_MSB,
-		I2C_RESTART, 0x3b, I2C_READ, I2C_READ };
+I2C_RESTART, 0x3b, I2C_READ, I2C_READ };
 static const uint16_t mma8452_stop[] = { 0x3a, CTRL_REG1, 0x00, I2C_RESTART,
 		0x3b, I2C_READ };
 static const uint16_t mma8452_start[] = { 0x3a, CTRL_REG1, 0x11, I2C_RESTART,
@@ -100,9 +100,14 @@ uint16_t cycle = 0;
 uint16_t onDuration = 0;
 uint16_t onoffDuration = 0;
 volatile uint32_t seconds = 0;
+typedef enum {
+	AROMA, CONTINU
+} mode_t;
+mode_t selectedMode = AROMA;
+uint8_t isBoost = 0;
 
 void startMotor() {
-// start only if tilted
+// setting valve
 	if (orient < 0) {
 		P1OUT |= BIT1;
 	} else {
@@ -119,15 +124,20 @@ void stopMotor() {
 }
 
 void startMode() {
+	P2OUT = 0;
 	if (orient != 0) {
-		if (P2OUT & BIT0) {
+		if (isBoost)
+			P2OUT |= BIT1;
+		if (selectedMode == AROMA) {
 			// Aroma mode
+			P2OUT |= BIT0;
 			onDuration = 900;
 			onoffDuration = 2700;
 			cycle = 3;
 			seconds = 0;
 		} else {
 			// Continu mode
+			P2OUT |= BIT2;
 			onDuration = 10;
 			onoffDuration = 70;
 			cycle = 412;
@@ -141,18 +151,18 @@ void startMode() {
 
 void checkCap() {
 	keyPressed = (struct Element *) TI_CAPT_Buttons(&buttons);
-	if (keyPressed) {
+	if ((orient != 0) && (keyPressed)) {
 		if (keyPressed == &aroma_element) {
-			P2OUT &= ~BIT2;
-			P2OUT |= BIT0;
+			selectedMode = AROMA;
 			startMode();
 		}
 		if (keyPressed == &boost_element) {
-			P2OUT ^= BIT1;
+			isBoost = !isBoost;
+			if (orient != 0)
+				P2OUT |= BIT1;
 		}
 		if (keyPressed == &continu_element) {
-			P2OUT &= ~BIT0;
-			P2OUT |= BIT2;
+			selectedMode = CONTINU;
 			startMode();
 		}
 	}
@@ -167,6 +177,11 @@ void sleep(unsigned int time) {
 	__no_operation();
 }
 
+
+void timerCount(){
+
+}
+
 int8_t neworient = 0;
 void main(void) {
 	volatile uint8_t ticks = 0;
@@ -178,7 +193,7 @@ void main(void) {
 	P1OUT = 0x00;
 
 	P2DIR = 0xFF;
-	P2OUT = BIT0;
+	P2OUT = 0x00;
 
 	CCTL0 = CCIE;
 	CCTL1 = OUTMOD_7;
@@ -223,6 +238,7 @@ void main(void) {
 				break;
 			}
 		}
+
 		div++;
 		if (div == 64) {
 			// seconds divider
