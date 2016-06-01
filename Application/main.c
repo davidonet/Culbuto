@@ -11,10 +11,10 @@ void initAccel() {
 	LPM0;
 }
 
-
 int8_t computeAccel() {
 // High debouncing orientation change
-	accelHistory[historyIndex] = (int8_t) ((rawAccelData[0] << 8 | rawAccelData[1]) >> 8);
+	accelHistory[historyIndex] = (int8_t) ((rawAccelData[0] << 8
+			| rawAccelData[1]) >> 8);
 	historyIndex++;
 	if (7 < historyIndex)
 		historyIndex = 0;
@@ -52,7 +52,6 @@ void initIO() {
 	CCTL1 = OUTMOD_7;
 	CCR1 = 0;
 }
-
 
 void startMotor() {
 // setting valve
@@ -105,11 +104,18 @@ void checkCap() {
 			startMode();
 		}
 		if (keyPressed == &boost_element) {
-			isBoost = !isBoost;
-			if ((currentOrientation != 0) && isBoost) {
-				P2OUT |= BIT1;
-			} else {
-				P2OUT &= ~BIT1;
+			if (boostDebounce) {
+				isBoost = !isBoost;
+				if ((currentOrientation != 0) && isBoost) {
+					P2OUT |= BIT1;
+				} else {
+					P2OUT &= ~BIT1;
+				}
+				boostDebounce = 0;
+			}
+			else
+			{
+				boostDebounce = 1;
 			}
 		}
 		if (keyPressed == &continu_element) {
@@ -157,6 +163,8 @@ void timerCount() {
 	}
 }
 
+#define DUTY 300
+
 void motorDriver() {
 	if (isMotorOn) {
 		// switch on motor
@@ -165,18 +173,17 @@ void motorDriver() {
 		// switch off motor
 		P1OUT &= ~BIT2;
 	}
-	sleep(350); // pwm bit banging
+	sleep(DUTY); // pwm bit banging
 	if (~P2OUT & BIT1) {
 		P1OUT &= ~BIT2;
 	}
 	if (ticks == 3) {
 		// capacitive sensing bias
-		sleep(59);
+		sleep(409 - DUTY);
 	} else {
-		sleep(159);
+		sleep(509 - DUTY);
 	}
 }
-
 
 void main(void) {
 	initIO();
@@ -191,7 +198,8 @@ void main(void) {
 			switch (ticks) {
 			case 1:
 				// retrieve accelerometer data
-				i2c_send_sequence(mma8452_read_interrupt_source, 6, rawAccelData, 0);
+				i2c_send_sequence(mma8452_read_interrupt_source, 6,
+						rawAccelData, 0);
 				break;
 
 			case 2:

@@ -67,4 +67,5 @@ typedef enum {
 } mode_t;
 mode_t selectedMode = AROMA;
 uint8_t isBoost = 0;
+uint8_t boostDebounce = 0;
 
